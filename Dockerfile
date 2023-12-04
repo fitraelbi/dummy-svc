@@ -1,19 +1,19 @@
 FROM golang:alpine as build-env
 
-ARG SERVICE_NAME=dummy-svc
+ARG SERVICE_NAME=fiber_name
 
-RUN mkdir /service
-ADD . /service/
+RUN mkdir /app
+ADD . /app/
 
-WORKDIR /service
+WORKDIR /app
 RUN apk add --no-cache git
-RUN go build  -o ${SERVICE_NAME} ./app/
+RUN go build  -o ${SERVICE_NAME} .
 
 FROM alpine
-ARG SERVICE_NAME=dummy-svc
-WORKDIR /service
-COPY --from=build-env /service/${SERVICE_NAME}    /service/${SERVICE_NAME}
+ARG SERVICE_NAME=fiber_name
+WORKDIR /app
+COPY --from=build-env /app/${SERVICE_NAME}    /app/${SERVICE_NAME}
 
-EXPOSE 7777
+EXPOSE 5000
 
-ENTRYPOINT ["/service/dummy-svc"]
+ENTRYPOINT ["/app/fiber_name"]
