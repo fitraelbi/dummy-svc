@@ -2,7 +2,6 @@ name: dummy-svc
 
 on: [push]
         
-
 jobs:
     Build:
       name: Push Docker image to Docker Hub
