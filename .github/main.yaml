@@ -1,6 +1,6 @@
-name: Fiber-Name
+name: dummy-svc
 
-on: workflow_dispatch
+on: [push]
         
 
 jobs:
