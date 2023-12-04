@@ -14,6 +14,6 @@ ARG SERVICE_NAME=fiber_name
 WORKDIR /app
 COPY --from=build-env /app/${SERVICE_NAME}    /app/${SERVICE_NAME}
 
-EXPOSE 5000
+EXPOSE 8080
 
 ENTRYPOINT ["/app/fiber_name"]
