@@ -7,7 +7,13 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-20.04
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
