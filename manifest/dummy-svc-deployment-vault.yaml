@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dummy-svc
+spec:
+  selector:
+    app: dummy-svc
+    type: backend
+  type: ClusterIP
+  ports:
+    - port: 80
+      name: dummy-svc
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-svc
+  labels:
+    app: dummy-svc
+    type: backend
+spec:
+  template:
+    metadata:
+      name: dummy-svc
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true" 
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'coba'
+        vault.hashicorp.com/agent-inject-secret-.env: 'development/data/test'
+      labels:
+        app: dummy-svc
+        type: backend
+    spec:
+      # nodeSelector:
+      #   utility: "true"
+      serviceAccountName: coba
+      containers:
+        - name: dummy-svc
+          image: fitrakz/dummy-svc:vault-0.0.1
+          imagePullPolicy: "Always"
+  replicas: 1
+  selector:
+    matchLabels:
+      type: backend
