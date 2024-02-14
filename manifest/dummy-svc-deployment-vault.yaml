@@ -28,6 +28,10 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'coba'
         vault.hashicorp.com/agent-inject-secret-.env: 'development/data/test'
+        vault.hashicorp.com/agent-inject-template-.env: |
+          {{ with secret "development/data/test" -}}
+            export LOCALHOST="{{ .Data.data.LOCALHOST }}"
+          {{- end }}
       labels:
         app: dummy-svc
         type: backend
@@ -37,7 +41,7 @@ spec:
       serviceAccountName: coba
       containers:
         - name: dummy-svc
-          image: fitrakz/dummy-svc:vault-0.0.1
+          image: fitrakz/dummy-svc:vault-0.0.2
           imagePullPolicy: "Always"
   replicas: 1
   selector:
