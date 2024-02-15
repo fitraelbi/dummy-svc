@@ -27,10 +27,23 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true" 
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'coba'
-        vault.hashicorp.com/agent-inject-secret-.env: 'development/data/test'
+        vault.hashicorp.com/agent-inject-secret-.env.default: 'development/data/default'
+        vault.hashicorp.com/secret-volume-path-.env.default: /app/config/
+        vault.hashicorp.com/agent-inject-template-.env.default: |
+          {{ with secret "development/data/default" -}}
+            {{ .Data.data }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-.env: 'development/data/dummy-svc'
+        vault.hashicorp.com/secret-volume-path-.env: /app/config/
         vault.hashicorp.com/agent-inject-template-.env: |
-          {{ with secret "development/data/test" -}}
-            {{ .Data.data.default }}
+          {{ with secret "development/data/dummy-svc" -}}
+            {{ .Data.data }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-.env.utility: 'development/data/utility'
+        vault.hashicorp.com/secret-volume-path-.env.utility: /app/config/
+        vault.hashicorp.com/agent-inject-template-.env.utility: |
+          {{ with secret "development/data/utility" -}}
+            {{ .Data.data }}
           {{- end }}
       labels:
         app: dummy-svc
@@ -41,7 +54,7 @@ spec:
       serviceAccountName: coba
       containers:
         - name: dummy-svc
-          image: fitrakz/dummy-svc:vault-0.0.3
+          image: fitrakz/dummy-svc:vault-0.0.4
           imagePullPolicy: "Always"
   replicas: 1
   selector:

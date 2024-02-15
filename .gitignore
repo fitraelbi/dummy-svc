@@ -1,2 +1,6 @@
 test.txt
-result-env
+result/
+config/*
+!config/.env.example
+!config/.env.default.example
+
